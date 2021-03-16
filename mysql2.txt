@@ -1,0 +1,147 @@
+ drop table if exists emp;
+ create table emp(
+ id int primary key auto_increment,
+ name varchar(20),
+ sex varchar(5),
+ depart varchar(20),
+ salary decimal(10,2)
+ );
+ alter table emp default character set utf8;
+ alter table emp change name name varchar(20) character set utf8;
+ alter table emp change sex sex varchar(5) character set utf8;
+ alter table emp change depart depart varchar(20) character set utf8;
+ 
+ insert into emp(name,sex,depart,salary) values
+ ('张三','男','信息部',12000),
+ ('李四','男','人事部',9800),
+ ('贺英','女','人事部',9500),
+ ('王强','男','研发部',15000),
+ ('李利','女','信息部',10000),
+ ('刘甜','女','研发部',11000),
+ ('赵敏','女','人事部',8800),
+ ('韩信','男','信息部',10500),
+ ('王强','男','信息部',9500),
+ ('安其拉','女','人事部',9500),
+ ('刘甜','女','信息部',10000),
+ ('赵云','男','研发部',13000);
+ 
+ select sex,avg(salary) from emp group by sex;
+ select depart,sum(salary) from emp group by depart;
+ select depart,sum(salary) from emp group by depart order by sum(salary) desc limit 1,1;
+ select name from emp group by name having count()  1;
+ select depart,avg(salary) from emp where sex = '男' and salary  10000 group by depart;
+ 
+ 
+ 
+ 
+ drop table if exists staff;
+ create table staff(
+ id int primary key auto_increment,
+ name varchar(20),
+ age int,
+ depart_id int
+ );
+ alter table staff default character set utf8;
+ alter table staff change name name varchar(20) character set utf8;
+ 
+ insert into staff(name,age,depart_id) values
+ ('张三',30,2),
+ ('李四',32,1),
+ ('韩信',36,3),
+ ('花木兰',41,2),
+ ('曹操',29,1),
+ ('赵云',30,3);
+ 
+  drop table if exists depart;
+  create table depart(
+  id int primary key auto_increment,
+  name varchar(20)
+  );
+ alter table depart default character set utf8;
+ alter table depart change name name varchar(20) character set utf8;
+  
+  insert into depart(name) values
+  ('信息部'),
+  ('研发部'),
+  ('人事部');
+  
+  
+  
+  drop table if exists salary;
+  create table salary(
+  id int primary key auto_increment,
+  salary decimal(10,1),
+  month int,
+  staff_id int 
+  );
+  
+  insert into salary(salary,month,staff_id) values
+  (8500,9,3),(8600,3,3),(8200,4,3),(9000,5,3),
+  (9200,9,2),(9300,3,2),(9100,5,2),(9000,4,2),
+  (9500,9,5),(10000,3,5),(9500,5,5),(9400,4,5),
+  (9000,9,4),(9000,3,4),(9400,4,4),(9200,5,4),
+  (9100,9,1),(9300,3,1),(9500,4,1),(9100,5,1),
+  (9800,9,6),(9500,3,6),(9900,4,6),(9800,5,6);
+  
+  select depart.name,sum(salary.salary) from salary join staff on salary.staff_id = staff.id 
+                                                    join depart on staff.depart_id = depart.id
+													where salary.month = 9 group by depart.id;
+													
+select depart.name,count(staff.id) from staff join depart on staff.depart_id = depart.id group by staff.depart_id;
+
+select salary.month,depart.name,sum(salary.salary) from salary
+join staff on salary.staff_id = staff.id 
+join depart on staff.depart_id = depart.id
+group by salary.month,depart.id;
+
+create table A(
+name varchar(32),
+grade int
+);
+ alter table A default character set utf8;
+ alter table A change name name varchar(32) character set utf8;
+insert into A(name,grade) values
+('zhangshan',80),
+('lisi',60),
+('wangwu',84);
+
+
+create table B(
+name varchar(32),
+age int
+);
+insert into B(name,age) values
+('zhangshan',26),
+('lisi',24),
+('wangwu',26),
+('wutian',26);
+
+ alter table B default character set utf8;
+ alter table B change name name varchar(32) character set utf8;
+ 
+  select B.name,A.grade,B.age from B left join A on A.name = B.name;
+
+
+
+
+
+create table sal(
+id int,
+salary int
+);
+insert into sal(id,salary) values
+(1,100),
+(2,200),
+(3,300);
+select distinct salary SecondHighhestSalary from sal order by salary desc limit 1,1;
+
+create table T1(
+id int
+);
+create table T2(
+id int
+);
+insert into T1(id) values(7),(2),(3),(4),(5);
+insert into T2(id) values(1),(2),(6),(7),(8);
+select  from T1 union select  from T2;
+select id from T1 union select id from T2 where T1.id != T2.id;
